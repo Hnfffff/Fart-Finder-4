@@ -9,6 +9,9 @@ public class Helditems : MonoBehaviour
     [SerializeField]
     private GameObject fartSucker; //create gameobject variable to hold fart vacuum
 
+    [SerializeField]
+    private GameObject tablet;
+
     ArmAnimController armAnimController;
 
     public string activeitem; //identifier for what item is being held, called from other scripts for animation purposes
@@ -20,6 +23,7 @@ public class Helditems : MonoBehaviour
         //this will change once the item dropping and picking up is added
         fartDetector.SetActive(true); //set fart detector to true
         fartSucker.SetActive(false); //set fart sucker to false
+        tablet.SetActive(false);
         activeitem = "detector"; //set active item to fartdetector cos of how its coded now
         armAnimController = GetComponent<ArmAnimController>();
     }
@@ -34,6 +38,7 @@ public class Helditems : MonoBehaviour
                 armAnimController.Animator.Play("Base Layer.Swap");
                 fartSucker.SetActive(false); //set sucker to dalse
                 fartDetector.SetActive(true); //set detector to true
+                tablet.SetActive(false);
                 activeitem = "detector"; // set identifier to 'detector'
                 Debug.Log(activeitem); //flag for testing
 
@@ -47,11 +52,25 @@ public class Helditems : MonoBehaviour
             {
                 armAnimController.Animator.Play("Base Layer.Swap");
                 fartDetector.SetActive(false); //set detector to false
+                tablet.SetActive (false);
                 fartSucker.SetActive(true); // set sucker to true
                 activeitem = "sucker"; //change identifier to 'sucker'
                 Debug.Log(activeitem); // flag for testing
 
                 
+            }
+        }
+
+        if(Input.GetKeyDown("3"))
+        {
+            if(tablet.activeSelf == false)
+            {
+                armAnimController.Animator.Play("Base Layer.Swap");
+                fartDetector.SetActive(false);
+                fartSucker.SetActive(false);
+                tablet.SetActive(true);
+                activeitem = "tablet";
+                Debug.Log(activeitem);
             }
         }
     }

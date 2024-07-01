@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ArmAnimController : MonoBehaviour
@@ -10,6 +11,13 @@ public class ArmAnimController : MonoBehaviour
 
     Helditems itemcontrol; //inventory script
     FartSucker fartSucker;
+    [SerializeField] bool lookingAtIpad;
+
+    [SerializeField] GameObject crosshair;
+
+    [SerializeField] GameObject ipad;
+    Material[] heldMaterials;
+    Renderer ipadScreen;
 
 
     // Start is called before the first frame update
@@ -18,6 +26,11 @@ public class ArmAnimController : MonoBehaviour
         itemcontrol =GetComponent<Helditems>(); //gets the inventory script from the player and assigns it to itemcontrol
         Animator = GetComponent<Animator>(); //gets the animator component
         //fingerAnimator = Finger.GetComponent<Animation>();
+        lookingAtIpad = false;
+        ipadScreen = ipad.GetComponent<Renderer>();
+        heldMaterials = ipadScreen.materials;
+        heldMaterials[1].SetColor("_Color", Color.black);
+        ipadScreen.materials = heldMaterials;
     }
 
     // Update is called once per frame
@@ -43,6 +56,27 @@ public class ArmAnimController : MonoBehaviour
             if(itemcontrol.activeitem == "sucker") //if the identifier from 'inventory' script is equal to 'sucker'
             {
                 Animator.Play("Base Layer.Sucking"); //play the sucking animation
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(itemcontrol.activeitem == "tablet" && lookingAtIpad == false)
+            {
+                lookingAtIpad= true;
+                crosshair.SetActive(false);
+                Animator.Play("Base Layer.Ipad");
+                heldMaterials[1].SetColor("_Color", Color.white);
+                ipadScreen.materials = heldMaterials;
+            }
+
+            else if (itemcontrol.activeitem == "tablet" && lookingAtIpad == true)
+            {
+                lookingAtIpad = false;
+                crosshair.SetActive(true);
+                Animator.Play("Base Layer.Return");
+                heldMaterials[1].SetColor("_Color", Color.black);
+                ipadScreen.materials = heldMaterials;
             }
         }
 
